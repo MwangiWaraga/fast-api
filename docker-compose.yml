@@ -1,0 +1,30 @@
+services:
+  # 1. The Database Service
+  db:
+    image: postgres:16  # You can change 15 to 16 or latest
+    container_name: fast_api_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root         # The username
+      POSTGRES_PASSWORD: password # The password
+      POSTGRES_DB: fast_api_db    # The default database name
+    ports:
+      - "5432:5432"               # Maps local port 5432 to container port 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persists data even if you delete the container
+
+  # 2. The Dashboard Service (pgAdmin)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: fast_api_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com # Login email for pgAdmin
+      PGADMIN_DEFAULT_PASSWORD: root         # Login password for pgAdmin
+    ports:
+      - "5050:80"                            # Access pgAdmin at localhost:5050
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

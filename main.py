@@ -55,7 +55,7 @@ def post_page(request: Request, post_id: int):
 def create_user(user:UserCreate, db: Annotated[Session, Depends(get_db)]):
     # check if the user we want to create exists
     result = db.execute(
-        select(models.User).where(models.User.username) == user.username,
+        select(models.User).where(models.User.username == user.username),
     )
     existing_user = result.scalars().first()
 
